@@ -1,0 +1,78 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: telefonos API
+  description: API para telefonos 
+
+paths:
+  /api/v1/phones:
+    x-router-controller: phonesController
+    get:
+      description: Returns all phones
+      operationId: getPhones
+      responses:
+        200:
+          description: Phone list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/phone'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  /api/v1/phones/{year}:
+    x-router-controller: phonesController
+    get:
+      description: Returns a single phone by its year
+      operationId: findByyear
+      parameters:
+        - required: true
+          name: year
+          description: year of the phone to fetch
+          in: path
+          schema:
+            type: number
+      responses:
+        200:
+          description: Phone found by year
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/phone'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+
+components:
+  schemas:
+    phone:
+        type: object
+        required:
+          - year
+        properties:
+          year:
+            type: number
+          province:
+            type: string
+          landline:
+            type: number
+          post_payment_phone_line:
+            type: number
+          wide_landline:
+            type: number
+    error:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+      additionalProperties: true
